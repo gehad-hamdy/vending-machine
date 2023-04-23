@@ -1,13 +1,11 @@
 package flapkap.vendingmachine.data.entities;
 
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.LazyGroup;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,14 +15,17 @@ import javax.validation.constraints.NotNull;
 @Table(name = "users")
 public class User extends TimestampedEntity{
     @NotNull
+    @NotBlank
     private String userName;
+
+    @NotNull
+    @NotBlank
+    private String password;
 
     private Double deposit;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
-    @LazyToOne(LazyToOneOption.NO_PROXY)
-    @LazyGroup("roles")
     private Role role;
 
     public String getUserName() {
@@ -33,6 +34,14 @@ public class User extends TimestampedEntity{
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Double getDeposit() {

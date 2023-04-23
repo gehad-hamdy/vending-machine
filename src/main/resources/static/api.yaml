@@ -159,16 +159,33 @@ components:
           type: string
         role:
           type: integer
+          format: int64
+      required:
+        - userName
+        - password
+        - role
+
+    UserUpdate:
+      description: user register
+      properties:
+        userName:
+          type: string
+        password:
+          type: string
 
     UserResponse:
       description: user register response
       properties:
         userName:
           type: string
-        role:
-          type: string
         deposit:
           type: number
+
+    UserAuthResponse:
+      description: user register response
+      properties:
+        token:
+          type: string
 
 paths:
   /users:
@@ -203,7 +220,7 @@ paths:
       summary: user register
       operationId: userRegister
       requestBody:
-        description: dynamic section body
+        description: user register body
         content:
           application/json:
             schema:
@@ -215,6 +232,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        default:
+          $ref: '#/components/responses/Error'
+
+  /users/authonticate:
+    post:
+      tags:
+        - User
+      summary: user register
+      operationId: userAuthenticate
+      requestBody:
+        description: user Authenticate
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthResponse'
         default:
           $ref: '#/components/responses/Error'
 
@@ -231,6 +270,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         200:
           description: OK
@@ -252,12 +292,13 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         description: user body
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/UserUpdate"
       responses:
         200:
           description: OK
@@ -279,6 +320,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         200:
           description: OK
