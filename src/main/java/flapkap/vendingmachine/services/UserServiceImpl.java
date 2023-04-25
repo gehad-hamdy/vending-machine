@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +33,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.findByUsername(username);
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(),
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     List.of(new SimpleGrantedAuthority(user.getRole().getName())));
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
@@ -46,6 +50,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User register(UserDto userDto) {
         User user = this.userMapper.map(userDto);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = this.getRoleById(userDto.getRoleId());
         user.setRole(role);
         return this.userRepository.save(user);
@@ -53,7 +58,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User updateUser(Long id, UserDto userDto) {
-        User user = this.userMapper.map(userDto);
+        User user = this.getUserById(id);
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return this.userRepository.save(user);
     }
 

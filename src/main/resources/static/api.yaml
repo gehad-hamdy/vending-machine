@@ -5,47 +5,23 @@ info:
   title: Vending Machine API
 
 servers:
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:8890/api/v1
     description: Local development server
 
 security:
-  - OAuth2Staging:
-      - openid
-  - OAuth2Production:
+  - OAuth2Local:
       - openid
 
 components:
-#  securitySchemes:
-#    OpenID:
-#      type: openIdConnect
-#      openIdConnectUrl: https://sso.maxab.info/auth/realms/maxab/.well-known/openid-configuration
-#
-#    OAuth2Staging:
-#      type: oauth2
-#      flows:
-#        authorizationCode:
-#          authorizationUrl: https://sso.maxab.org/auth/realms/maxab/protocol/openid-connect/auth
-#          tokenUrl: https://sso.maxab.org/auth/realms/maxab/protocol/openid-connect/token
-#          scopes:
-#            openid: Default
-#
-#    OAuth2Local:
-#      type: oauth2
-#      flows:
-#        authorizationCode:
-#          authorizationUrl: http://localhost:8080/auth/realms/maxab/protocol/openid-connect/auth
-#          tokenUrl: http://localhost:8080/auth/realms/maxab/protocol/openid-connect/token
-#          scopes:
-#            openid: Default
-#
-#    OAuth2Production:
-#      type: oauth2
-#      flows:
-#        authorizationCode:
-#          authorizationUrl: https://sso.maxab.info/auth/realms/maxab/protocol/openid-connect/auth
-#          tokenUrl: https://sso.maxab.info/auth/realms/maxab/protocol/openid-connect/token
-#          scopes:
-#            openid: Default
+  securitySchemes:
+    OAuth2Local:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://localhost:8080/auth/realms/vending-machine/protocol/openid-connect/auth
+          tokenUrl: http://localhost:8080/auth/realms/vending-machine/protocol/openid-connect/token
+          scopes:
+            openid: Default
 
   parameters:
     offsetParam:
@@ -153,30 +129,41 @@ components:
     User:
       description: user register
       properties:
-        userName:
+        username:
           type: string
         password:
           type: string
-        role:
+        roleId:
           type: integer
           format: int64
       required:
-        - userName
+        - username
         - password
         - role
 
     UserUpdate:
       description: user register
       properties:
-        userName:
+        username:
           type: string
         password:
           type: string
 
+    UserAuth:
+      description: user register
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
     UserResponse:
       description: user register response
       properties:
-        userName:
+        username:
           type: string
         deposit:
           type: number
@@ -246,7 +233,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserUpdate"
+              $ref: "#/components/schemas/UserAuth"
       responses:
         200:
           description: OK

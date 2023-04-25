@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class User extends TimestampedEntity{
     @NotNull
     @NotBlank
-    private String userName;
+    private String username;
 
     @NotNull
     @NotBlank
@@ -28,12 +28,12 @@ public class User extends TimestampedEntity{
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
