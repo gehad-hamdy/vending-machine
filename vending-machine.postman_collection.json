@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "9199c45e-2ab5-43d1-aeea-5eb45a5986d1",
+		"name": "vending-machine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9742314"
+	},
+	"item": [
+		{
+			"name": "user authonticate",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"password\" : \"123456789\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/users/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"ali\",\n    \"password\" : \"123456789\",\n    \"roleId\" : 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user update",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"gehad hamdy\",\n    \"password\" : \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create products",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGkiLCJpYXQiOjE2ODI2MjY2NjYsImV4cCI6MTY4MjYzMjY2Nn0.npmqAAxvhYyb1Z67Eq520_n4DD4XAo6bkDxlWaGBw9g",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\" : \"silk\",\n    \"cost\" : 24,\n    \"amount_available\" : 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/products/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8890/api/v1/payment/deposit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGkiLCJpYXQiOjE2ODI2NDIxNTEsImV4cCI6MTY4MjY0ODE1MX0.hK5-kvAD_VqFfYhUj9gd55o6tvtU4LLXbomMCGqimAc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"deposit_value\" : 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/payment/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"payment",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8890/api/v1/payment/buy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGkiLCJpYXQiOjE2ODI2NDIxNTEsImV4cCI6MTY4MjY0ODE1MX0.hK5-kvAD_VqFfYhUj9gd55o6tvtU4LLXbomMCGqimAc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"deposit_value\" : 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/payment/reset/deposit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"payment",
+						"reset",
+						"deposit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8890/api/v1/payment/buy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGkiLCJpYXQiOjE2ODI2NDIxNTEsImV4cCI6MTY4MjY0ODE1MX0.hK5-kvAD_VqFfYhUj9gd55o6tvtU4LLXbomMCGqimAc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"deposit_value\" : 20\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8890/api/v1/payment/buy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8890",
+					"path": [
+						"api",
+						"v1",
+						"payment",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
