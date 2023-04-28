@@ -14,14 +14,9 @@ security:
 
 components:
   securitySchemes:
-    OAuth2Local:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: http://localhost:8080/auth/realms/vending-machine/protocol/openid-connect/auth
-          tokenUrl: http://localhost:8080/auth/realms/vending-machine/protocol/openid-connect/token
-          scopes:
-            openid: Default
+    BearerAuth:
+      type: http
+      scheme: bearer
 
   parameters:
     offsetParam:
@@ -115,16 +110,29 @@ components:
         id:
           type: integer
           format: int64
-        user_id:
-          type: integer
-          format: int64
         cost:
           type: integer
-          format: int64
+          format: double
         amount_available:
           type: integer
         name:
           type: string
+
+    ProductRequest:
+      description: Product Item
+      properties:
+        cost:
+          type: integer
+          format: double
+          minimum: 1
+        amount_available:
+          type: integer
+        name:
+          type: string
+      required:
+        - name
+        - cost
+        - amount_available
 
     User:
       description: user register
@@ -159,6 +167,43 @@ components:
       required:
         - username
         - password
+
+    UserDeposit:
+      description: user deposit
+      properties:
+        deposit_value:
+          type: integer
+          enum: [5,10,20,50,100]
+      required:
+        - deposit_value
+
+    ProductBuyRequest:
+      description: user buy product
+      properties:
+        product_id:
+          type: integer
+          format: int64
+        product_amount:
+          type: integer
+      required:
+        - product_id
+        - product_amount
+
+    ProductBuyResponse:
+      description: user product buy response
+      properties:
+        total_price:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductBuyRequest"
+
+    ResetResponse:
+      description: user reset response
+      properties:
+        message:
+          type: string
 
     UserResponse:
       description: user register response
@@ -222,7 +267,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
 
-  /users/authonticate:
+  /users/authenticate:
     post:
       tags:
         - User
@@ -321,11 +366,6 @@ paths:
       summary: List products
       operationId: listProduct
       parameters:
-        - in: query
-          name: searchText
-          schema:
-            type: string
-          required: false
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -354,7 +394,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
       responses:
         201:
           description: OK
@@ -378,6 +418,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         200:
           description: OK
@@ -399,11 +440,12 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/ProductRequest'
       responses:
         200:
           description: OK
@@ -425,8 +467,71 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         200:
           description: OK
+        default:
+          $ref: '#/components/responses/Error'
+
+  /payment/deposit:
+    post:
+      tags:
+        - Payment
+      summary: user payment operations
+      operationId: deposit
+      requestBody:
+        description: buyer deposit body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDeposit"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        default:
+          $ref: '#/components/responses/Error'
+
+  /payment/buy:
+    post:
+      tags:
+        - Payment
+      summary: user buy products
+      operationId: buyProduct
+      requestBody:
+        description: product body
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+               $ref: "#/components/schemas/ProductBuyRequest"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductBuyResponse'
+        default:
+          $ref: '#/components/responses/Error'
+
+  /payment/reset/deposit:
+    post:
+      tags:
+        - Payment
+      summary: user reset buy
+      operationId: reset
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
         default:
           $ref: '#/components/responses/Error'

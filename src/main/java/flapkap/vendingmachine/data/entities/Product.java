@@ -1,34 +1,26 @@
 package flapkap.vendingmachine.data.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.LazyGroup;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-@Entity
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Entity
 @Table(name = "products")
 public class Product extends TimestampedEntity {
-    @NotNull
-    @NotBlank
     private String name;
 
-    @Size(min = 1, message = "cost should be greater than 0")
     private Double cost;
 
     private Integer amountAvailable;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "user_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
     @LazyGroup("users")
     private User user;

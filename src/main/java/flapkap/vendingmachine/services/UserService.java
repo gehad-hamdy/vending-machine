@@ -13,6 +13,7 @@ public interface UserService {
     public void deleteUser(Long id);
 
     public User getUserById(final Long id);
+    public User getUserByUsername(final String username);
 
     public Page<User> listUsers(final Pageable pageable);
 }

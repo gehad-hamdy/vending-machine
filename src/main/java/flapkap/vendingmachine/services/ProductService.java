@@ -1,13 +1,16 @@
 package flapkap.vendingmachine.services;
 
+import flapkap.vendingmachine.data.dto.ProductDto;
 import flapkap.vendingmachine.data.entities.Product;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
-    public List<Product> listProducts();
-    public Product createProduct(Product product);
-    public Product updateProduct(Product product);
-    public void deleteProduct(Product product);
-    public void getProductById(Long id);
+    public Page<Product> listProducts(Pageable pageable);
+    public Product createProduct(ProductDto productDto);
+    public Product updateProduct(Long id, ProductDto productDto);
+    public void deleteProduct(Long id);
+    public Product getProductById(Long id);
+
+    public boolean userCanDoProductOperations(Long userId, Long productUserCreatedId);
 }

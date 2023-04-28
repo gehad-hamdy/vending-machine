@@ -101,7 +101,9 @@ public class UserController extends AbstractController implements UsersApi {
     public ResponseEntity<UserAuthResponseResource> userAuthenticate(UserAuthResource userAuthResource) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthResource.getUsername(), userAuthResource.getPassword()));
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(userAuthResource.getUsername());
+            var user = userService.getUserByUsername(userAuthResource.getUsername());
+            String token = jwtService.generateToken(user);
+            this.jwtService.setNewToken(user, token);
             return ResponseEntity.ok().body(this.userMapper.map(new AuthTokenDto(token)));
         } else {
             throw new UsernameNotFoundException("invalid user request !");

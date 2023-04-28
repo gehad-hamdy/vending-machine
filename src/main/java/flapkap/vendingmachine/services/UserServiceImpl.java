@@ -36,9 +36,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    User currentUser;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("User " + username + " not found."));
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     List.of(new SimpleGrantedAuthority(user.getRole().getName())));
@@ -73,6 +77,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUserById(Long id) {
         return this.userRepository.findById(id).orElseThrow(() ->
+                BusinessException.badRequest("User not found", HttpStatus.BAD_REQUEST.toString()));
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return this.userRepository.findByUsername(username).orElseThrow(() ->
                 BusinessException.badRequest("User not found", HttpStatus.BAD_REQUEST.toString()));
     }
 
